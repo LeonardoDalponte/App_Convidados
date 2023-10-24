@@ -15,9 +15,7 @@ class GuestFormActivity : AppCompatActivity(), View.OnClickListener {
 
     private lateinit var binding: ActivityGuestFormBinding
     private lateinit var viewmodel: GuestFormViewModel
-
     private var guestid = 0
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -33,7 +31,6 @@ class GuestFormActivity : AppCompatActivity(), View.OnClickListener {
         observe()
         loadData()
 
-
     }
 
     override fun onClick(v: View) {
@@ -42,7 +39,12 @@ class GuestFormActivity : AppCompatActivity(), View.OnClickListener {
             val presence = binding.radioPresent.isChecked
 
 
-            val model = GuestModel(guestid, name, presence)
+            val model = GuestModel().apply {
+                this.id = guestid
+                this.name = name
+                this.presence = presence
+            }
+
             viewmodel.save(model)
 
         }
@@ -51,7 +53,7 @@ class GuestFormActivity : AppCompatActivity(), View.OnClickListener {
     fun observe() {
         viewmodel.guests.observe(this, Observer {
             binding.editName.setText(it.name)
-            if (it.precense) {
+            if (it.presence) {
                 binding.radioPresent.isChecked = true
             } else {
                 binding.radioAbsent.isChecked = true
